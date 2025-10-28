@@ -317,59 +317,79 @@ class NotesService extends BaseNeonService {
   }
 
   async listByUser(userId: string) {
-    const result = await sql`
-      SELECT * FROM notes 
-      WHERE user_id = ${userId}
-      ORDER BY created_at DESC
-    `
-    return result
+    if (!sql) return []
+    try {
+      const result = await sql`
+        SELECT * FROM notes
+        WHERE user_id = ${userId}
+        ORDER BY created_at DESC
+      `
+      return result
+    } catch {
+      return []
+    }
   }
 
   async getByEvent(eventId: string) {
-    const result = await sql`
-      SELECT * FROM notes 
-      WHERE event_id = ${eventId}
-      ORDER BY created_at DESC
-    `
-    return result
+    if (!sql) return []
+    try {
+      const result = await sql`
+        SELECT * FROM notes
+        WHERE event_id = ${eventId}
+        ORDER BY created_at DESC
+      `
+      return result
+    } catch {
+      return []
+    }
   }
 
   async create(userId: string, data: { title: string; content: string }) {
-    const id = crypto.randomUUID()
-    const now = new Date().toISOString()
+    if (!sql) return null
+    try {
+      const id = crypto.randomUUID()
+      const now = new Date().toISOString()
 
-    const result = await sql`
-      INSERT INTO notes (id, user_id, title, content, created_at, updated_at)
-      VALUES (${id}, ${userId}, ${data.title}, ${data.content}, ${now}, ${now})
-      RETURNING *
-    `
-    return result[0]
+      const result = await sql`
+        INSERT INTO notes (id, user_id, title, content, created_at, updated_at)
+        VALUES (${id}, ${userId}, ${data.title}, ${data.content}, ${now}, ${now})
+        RETURNING *
+      `
+      return result[0]
+    } catch {
+      return null
+    }
   }
 
   async update(id: string, data: { title?: string; content?: string }) {
-    const now = new Date().toISOString()
-    const updates: string[] = []
-    const values: any[] = [id]
-    let paramIndex = 2
+    if (!sql) return null
+    try {
+      const now = new Date().toISOString()
+      const updates: string[] = []
+      const values: any[] = [id]
+      let paramIndex = 2
 
-    if (data.title !== undefined) {
-      updates.push(`title = $${paramIndex}`)
-      values.push(data.title)
-      paramIndex++
+      if (data.title !== undefined) {
+        updates.push(`title = $${paramIndex}`)
+        values.push(data.title)
+        paramIndex++
+      }
+
+      if (data.content !== undefined) {
+        updates.push(`content = $${paramIndex}`)
+        values.push(data.content)
+        paramIndex++
+      }
+
+      updates.push(`updated_at = $${paramIndex}`)
+      values.push(now)
+
+      const query = `UPDATE notes SET ${updates.join(", ")} WHERE id = $1 RETURNING *`
+      const result = await sql(query, values)
+      return result[0]
+    } catch {
+      return null
     }
-
-    if (data.content !== undefined) {
-      updates.push(`content = $${paramIndex}`)
-      values.push(data.content)
-      paramIndex++
-    }
-
-    updates.push(`updated_at = $${paramIndex}`)
-    values.push(now)
-
-    const query = `UPDATE notes SET ${updates.join(", ")} WHERE id = $1 RETURNING *`
-    const result = await sql(query, values)
-    return result[0]
   }
 
   async remove(id: string) {
