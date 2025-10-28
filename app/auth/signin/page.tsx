@@ -19,7 +19,7 @@ export default function SignInPage() {
             className="w-full bg-transparent"
             onClick={() => signIn("google", { callbackUrl: "/" })}
           >
-            <FaGoogle className="mr-2 h-4 w-4" />
+            <Mail className="mr-2 h-4 w-4" />
             Continuar com Google
           </Button>
           <Button
@@ -27,7 +27,7 @@ export default function SignInPage() {
             className="w-full bg-transparent"
             onClick={() => signIn("github", { callbackUrl: "/" })}
           >
-            <FaGithub className="mr-2 h-4 w-4" />
+            <Github className="mr-2 h-4 w-4" />
             Continuar com GitHub
           </Button>
         </CardContent>
