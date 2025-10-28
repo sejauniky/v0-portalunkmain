@@ -140,15 +140,20 @@ class DjService extends BaseNeonService {
   }
 
   async getAll() {
-    const result = await sql`
-      SELECT d.*, 
-             COUNT(DISTINCT e.id) as event_count
-      FROM djs d
-      LEFT JOIN events e ON d.id = e.dj_id
-      GROUP BY d.id
-      ORDER BY d.created_at DESC
-    `
-    return result
+    if (!sql) return []
+    try {
+      const result = await sql`
+        SELECT d.*,
+               COUNT(DISTINCT e.id) as event_count
+        FROM djs d
+        LEFT JOIN events e ON d.id = e.dj_id
+        GROUP BY d.id
+        ORDER BY d.created_at DESC
+      `
+      return result
+    } catch {
+      return []
+    }
   }
 }
 
@@ -159,15 +164,20 @@ class ProducerService extends BaseNeonService {
   }
 
   async getAll() {
-    const result = await sql`
-      SELECT p.*, 
-             COUNT(DISTINCT e.id) as event_count
-      FROM producers p
-      LEFT JOIN events e ON p.id = e.producer_id
-      GROUP BY p.id
-      ORDER BY p.created_at DESC
-    `
-    return result
+    if (!sql) return []
+    try {
+      const result = await sql`
+        SELECT p.*,
+               COUNT(DISTINCT e.id) as event_count
+        FROM producers p
+        LEFT JOIN events e ON p.id = e.producer_id
+        GROUP BY p.id
+        ORDER BY p.created_at DESC
+      `
+      return result
+    } catch {
+      return []
+    }
   }
 }
 
