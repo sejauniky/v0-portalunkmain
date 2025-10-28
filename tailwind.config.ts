@@ -191,7 +191,25 @@ export default {
           color: 'hsl(var(--status-sent))',
           borderColor: 'hsl(var(--status-sent) / 0.3)',
         },
-      })
+      });
+
+      addUtilities({
+        '.safe-area-inset-top': {
+          paddingTop: 'max(1rem, env(safe-area-inset-top))',
+        },
+        '.safe-area-inset-bottom': {
+          paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
+        },
+        '.safe-area-inset-left': {
+          paddingLeft: 'max(0px, env(safe-area-inset-left))',
+        },
+        '.safe-area-inset-right': {
+          paddingRight: 'max(0px, env(safe-area-inset-right))',
+        },
+        '.apple-touch-highlight': {
+          WebkitTapHighlightColor: 'transparent',
+        },
+      });
     }
   ],
 } satisfies Config;
