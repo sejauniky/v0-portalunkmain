@@ -172,7 +172,7 @@ export function Sidebar({ className }: SidebarProps) {
         )}
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+        <nav className="flex-1 p-4 sm:p-5 space-y-2 overflow-y-auto scrollbar-hide">
           {navItems.map((item, index) => {
             const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))
 
@@ -186,15 +186,15 @@ export function Sidebar({ className }: SidebarProps) {
                   }}
                   className={cn(
                     "w-full justify-start text-left font-normal transition-all duration-300",
-                    "hover-lift animate-fade-in",
-                    isCollapsed ? "px-2" : "px-3",
+                    "hover-lift animate-fade-in h-10 sm:h-11 apple-touch-highlight",
+                    isCollapsed ? "px-2" : "px-3 sm:px-4",
                     isActive
                       ? "bg-gradient-to-r from-neon-purple to-neon-blue text-white shadow-glow border-0 hover:shadow-glow"
                       : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
                   )}
                 >
-                  <item.icon className={cn("w-4 h-4", !isCollapsed && "mr-3")} />
-                  {!isCollapsed && <span>{item.label}</span>}
+                  <item.icon className={cn("w-5 h-5 flex-shrink-0", !isCollapsed && "mr-3")} />
+                  {!isCollapsed && <span className="text-sm sm:text-base">{item.label}</span>}
                 </Button>
               </Link>
             )
