@@ -12,10 +12,19 @@ const PaymentReviews = () => {
     setLoading(true)
     try {
       const response = await fetch("/api/payments/pending")
-      if (!response.ok) {
-        throw new Error("Failed to load pending payments")
-      }
       const data = await response.json()
+
+      if (data.warning) {
+        console.warn(data.warning)
+        toast({ title: "Aviso", description: "Banco de dados não está configurado. Conecte ao Neon para ver os dados.", variant: "default" })
+        setPending([])
+        return
+      }
+
+      if (!response.ok) {
+        throw new Error(data.details || "Failed to load pending payments")
+      }
+
       setPending(data.payments ?? [])
     } catch (err) {
       console.error("Failed to load pending payments", err)
