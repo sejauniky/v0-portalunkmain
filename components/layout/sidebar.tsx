@@ -202,19 +202,19 @@ export function Sidebar({ className }: SidebarProps) {
         </nav>
 
         {/* Logout */}
-        <div className="p-4 border-t border-border/50">
+        <div className="p-4 sm:p-5 border-t border-border/50 safe-area-inset-bottom">
           <Button
             onClick={handleLogout}
             variant="ghost"
             disabled={isLoggingOut}
             className={cn(
-              "w-full justify-start text-left font-normal text-muted-foreground hover:text-foreground hover:bg-destructive/20",
-              isCollapsed ? "px-2" : "px-3",
+              "w-full justify-start text-left font-normal text-muted-foreground hover:text-foreground hover:bg-destructive/20 h-10 sm:h-11 apple-touch-highlight",
+              isCollapsed ? "px-2" : "px-3 sm:px-4",
               isLoggingOut && "opacity-70 cursor-not-allowed",
             )}
           >
-            <LogOut className={cn("w-4 h-4", !isCollapsed && "mr-3")} />
-            {!isCollapsed && <span>{isLoggingOut ? "Saindo..." : "Sair"}</span>}
+            <LogOut className={cn("w-5 h-5 flex-shrink-0", !isCollapsed && "mr-3")} />
+            {!isCollapsed && <span className="text-sm sm:text-base">{isLoggingOut ? "Saindo..." : "Sair"}</span>}
           </Button>
         </div>
       </div>
