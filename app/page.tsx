@@ -304,12 +304,12 @@ const Home = () => {
             <h1 className="text-2xl font-bold text-foreground">Dashboard Administrativo</h1>
             <p className="text-muted-foreground mt-1">
               Visão geral das operações -{" "}
-              {currentTime?.toLocaleDateString("pt-BR", {
+              {isHydrated && currentTime ? currentTime.toLocaleDateString("pt-BR", {
                 weekday: "long",
                 year: "numeric",
                 month: "long",
                 day: "numeric",
-              })}
+              }) : "--"}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:gap-3">
