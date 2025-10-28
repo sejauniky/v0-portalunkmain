@@ -3,7 +3,7 @@
 import { signIn } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { FaGoogle, FaGithub } from "react-icons/fa"
+import { Mail, Github } from "lucide-react"
 
 export default function SignInPage() {
   return (
