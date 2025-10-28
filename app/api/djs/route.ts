@@ -83,6 +83,10 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
+    if (!isNeonConfigured) {
+      return NextResponse.json({ error: "Database not configured" }, { status: 503 })
+    }
+
     const { id, ...payload } = await request.json()
 
     if (!id) {
@@ -90,6 +94,10 @@ export async function PUT(request: NextRequest) {
     }
 
     const sql = getSql()
+
+    if (!sql) {
+      throw new Error("Failed to initialize database connection")
+    }
 
     // Normalize status
     if (payload.status && typeof payload.status === "string") {
@@ -107,7 +115,7 @@ export async function PUT(request: NextRequest) {
 
     const result = await sql`
       UPDATE djs
-      SET 
+      SET
         artist_name = ${payload.artist_name},
         real_name = ${payload.real_name},
         email = ${payload.email},
@@ -131,6 +139,9 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ dj: result[0] })
   } catch (error) {
     console.error("Failed to update DJ:", error)
-    return NextResponse.json({ error: "Failed to update DJ" }, { status: 500 })
+    return NextResponse.json({
+      error: "Failed to update DJ",
+      details: error instanceof Error ? error.message : "Unknown error"
+    }, { status: 500 })
   }
 }
