@@ -10,7 +10,7 @@ export const getSql = () => {
   if (!_sql) {
     const connectionString = process.env.DATABASE_URL
     if (!connectionString) {
-      throw new Error("DATABASE_URL environment variable is not set. Please configure your Neon database connection.")
+      return null as any
     }
     _sql = neon(connectionString)
   }
@@ -18,7 +18,13 @@ export const getSql = () => {
 }
 
 // For server-side usage only
-export const sql = getSql()
+export const sql = (() => {
+  try {
+    return getSql()
+  } catch {
+    return null as any
+  }
+})()
 
 // Helper function to check if Neon is configured
 export const isNeonConfigured = Boolean(process.env.DATABASE_URL)
