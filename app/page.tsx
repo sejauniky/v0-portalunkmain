@@ -320,7 +320,7 @@ const Home = () => {
                 style={{ color: "rgba(209, 166, 39, 1)", textShadow: "1px 1px 3px rgba(221, 118, 28, 1)" }}
               />
               <span style={{ color: "rgba(250, 161, 72, 1)" }}>
-                {currentTime?.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                {isHydrated && currentTime ? currentTime.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "--:--"}
               </span>
             </div>
             {user && (
