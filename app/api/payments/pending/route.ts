@@ -15,10 +15,10 @@ export async function GET() {
     }
 
     const data = await sql`
-      SELECT id, event_name, event_date, fee, cache_value, payment_proof, payment_status
+      SELECT id, title, event_date, fee, cache_value, payment_proof, status
       FROM events
       WHERE payment_proof IS NOT NULL
-        AND payment_status != 'pago'
+        AND status != 'pago'
       ORDER BY created_at DESC
     `
 
