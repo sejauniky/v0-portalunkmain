@@ -12,39 +12,64 @@ class BaseNeonService {
   }
 
   async getAll() {
-    const result = await sql`SELECT * FROM ${sql(this.tableName)} ORDER BY created_at DESC`
-    return result
+    if (!sql) return []
+    try {
+      const result = await sql`SELECT * FROM ${sql(this.tableName)} ORDER BY created_at DESC`
+      return result
+    } catch {
+      return []
+    }
   }
 
   async getById(id: string) {
-    const result = await sql`SELECT * FROM ${sql(this.tableName)} WHERE id = ${id}`
-    return result[0] || null
+    if (!sql) return null
+    try {
+      const result = await sql`SELECT * FROM ${sql(this.tableName)} WHERE id = ${id}`
+      return result[0] || null
+    } catch {
+      return null
+    }
   }
 
   async create(data: any) {
-    const keys = Object.keys(data)
-    const values = Object.values(data)
-    const placeholders = keys.map((_, i) => `$${i + 1}`).join(", ")
-    const columns = keys.join(", ")
+    if (!sql) return null
+    try {
+      const keys = Object.keys(data)
+      const values = Object.values(data)
+      const placeholders = keys.map((_, i) => `$${i + 1}`).join(", ")
+      const columns = keys.join(", ")
 
-    const query = `INSERT INTO ${this.tableName} (${columns}) VALUES (${placeholders}) RETURNING *`
-    const result = await sql(query, values)
-    return result[0]
+      const query = `INSERT INTO ${this.tableName} (${columns}) VALUES (${placeholders}) RETURNING *`
+      const result = await sql(query, values)
+      return result[0]
+    } catch {
+      return null
+    }
   }
 
   async update(id: string, data: any) {
-    const keys = Object.keys(data)
-    const values = Object.values(data)
-    const setClause = keys.map((key, i) => `${key} = $${i + 2}`).join(", ")
+    if (!sql) return null
+    try {
+      const keys = Object.keys(data)
+      const values = Object.values(data)
+      const setClause = keys.map((key, i) => `${key} = $${i + 2}`).join(", ")
 
-    const query = `UPDATE ${this.tableName} SET ${setClause} WHERE id = $1 RETURNING *`
-    const result = await sql(query, [id, ...values])
-    return result[0]
+      const query = `UPDATE ${this.tableName} SET ${setClause} WHERE id = $1 RETURNING *`
+      const result = await sql(query, [id, ...values])
+      return result[0]
+    } catch {
+      return null
+    }
   }
 
   async delete(id: string) {
-    const result = await sql`DELETE FROM ${sql(this.tableName)} WHERE id = ${id} RETURNING *`
-    return result[0]
+    if (!sql) return null
+    try {
+      const result = await sql`DELETE FROM ${sql(this.tableName)} WHERE id = ${id} RETURNING *`
+      return result[0]
+    } catch {
+      return null
+    }
   }
 }
 
