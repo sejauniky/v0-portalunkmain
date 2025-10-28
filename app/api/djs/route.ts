@@ -3,7 +3,7 @@ import { getSql, isNeonConfigured } from "@/lib/neon"
 
 export async function GET() {
   try {
-    if (!isNeonConfigured) {
+    if (!isNeonConfigured()) {
       console.warn("Database not configured. Please connect to Neon.")
       return NextResponse.json({ djs: [], warning: "Database not configured" }, { status: 200 })
     }
