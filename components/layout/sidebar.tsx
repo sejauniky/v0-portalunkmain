@@ -161,7 +161,7 @@ export function Sidebar({ className }: SidebarProps) {
               <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center shadow-glow animate-pulse" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate text-[#FFE6F4]">
-                  {user?.fullName || user?.username || user?.emailAddresses[0]?.emailAddress}
+                  {user?.username || user?.email}
                 </p>
                 <p className="text-xs text-[rgba(193,80,253,1)]">
                   {userRole === "admin" ? "Administrador" : "Produtor"}
