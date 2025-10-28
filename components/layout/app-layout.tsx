@@ -19,7 +19,9 @@ export function AppLayout({ children }: AppLayoutProps) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <main className="flex-1 overflow-y-auto">
-          <div className="w-full">{children}</div>
+          <div className="w-full safe-area-inset-top safe-area-inset-bottom px-4 sm:px-6 lg:px-8">
+            {children}
+          </div>
         </main>
       </div>
     )
@@ -28,8 +30,10 @@ export function AppLayout({ children }: AppLayoutProps) {
   return (
     <div className="min-h-screen bg-background flex flex-col lg:flex-row">
       <Sidebar />
-      <main className="flex-1 overflow-y-auto h-screen pt-[106px] sm:pt-[106px] lg:pt-8 pb-8 transition-all">
-        <div className="w-full">{children}</div>
+      <main className="flex-1 overflow-y-auto lg:h-screen pt-[106px] sm:pt-[106px] lg:pt-8 pb-4 sm:pb-6 lg:pb-8 px-4 sm:px-6 lg:px-8 transition-all">
+        <div className="w-full safe-area-inset-bottom">
+          {children}
+        </div>
       </main>
     </div>
   )

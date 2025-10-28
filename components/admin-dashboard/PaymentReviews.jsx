@@ -12,10 +12,19 @@ const PaymentReviews = () => {
     setLoading(true)
     try {
       const response = await fetch("/api/payments/pending")
-      if (!response.ok) {
-        throw new Error("Failed to load pending payments")
-      }
       const data = await response.json()
+
+      if (data.warning) {
+        console.warn(data.warning)
+        toast({ title: "Aviso", description: "Banco de dados não está configurado. Conecte ao Neon para ver os dados.", variant: "default" })
+        setPending([])
+        return
+      }
+
+      if (!response.ok) {
+        throw new Error(data.details || "Failed to load pending payments")
+      }
+
       setPending(data.payments ?? [])
     } catch (err) {
       console.error("Failed to load pending payments", err)
@@ -83,8 +92,8 @@ const PaymentReviews = () => {
       {pending.map((ev) => (
         <div key={ev.id} className="p-3 border rounded flex items-center justify-between">
           <div>
-            <div className="font-semibold">{ev.event_name}</div>
-            <div className="text-xs text-muted-foreground">{ev.event_date}</div>
+            <div className="font-semibold">{ev.title || ev.event_name || ev.name || "Evento"}</div>
+            <div className="text-xs text-muted-foreground">{ev.event_date || ev.date || "Data não disponível"}</div>
             {ev.payment_proof && (
               <a href={ev.payment_proof} target="_blank" rel="noreferrer" className="text-sm text-blue-400 underline">
                 Visualizar comprovante

@@ -77,10 +77,10 @@ export function Sidebar({ className }: SidebarProps) {
   return (
     <>
       {/* Mobile Menu Button */}
-      <div className="lg:hidden fixed top-1.5 left-0 right-0 z-40 glass-card border-b border-primary/20 p-4 backdrop-blur-xl shadow-glow">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 glass-card border-b border-primary/20 px-4 py-3 sm:px-6 backdrop-blur-xl shadow-glow safe-area-inset-top apple-touch-highlight">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3 animate-fade-in">
-            <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center shadow-glow animate-pulse">
+            <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center shadow-glow animate-pulse">
               <img
                 src="https://cdn.builder.io/api/v1/image/assets%2F3d62991cf83740faa291d13d959ad05c%2Fc783b63f88704338ac16296d2ac24bd7?format=webp&width=800"
                 alt="Disco de vinil Portal UNK"
@@ -89,14 +89,14 @@ export function Sidebar({ className }: SidebarProps) {
               />
             </div>
             <div>
-              <h1 className="text-lg font-bold gradient-text">Portal UNK</h1>
+              <h1 className="text-base sm:text-lg font-bold gradient-text">Portal UNK</h1>
             </div>
           </div>
           <Button
             variant="ghost"
-            size="sm"
+            size="icon"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="text-muted-foreground hover:text-foreground glass-button hover-scale"
+            className="text-muted-foreground hover:text-foreground glass-button hover-scale h-10 w-10 apple-touch-highlight"
           >
             <Menu className="w-5 h-5" />
           </Button>
@@ -115,20 +115,20 @@ export function Sidebar({ className }: SidebarProps) {
       <div
         className={cn(
           "glass-card flex flex-col border-r transition-all duration-500 ease-in-out",
-          "fixed lg:sticky top-1.5 lg:top-2 z-50 h-screen",
+          "fixed lg:sticky top-0 lg:top-0 z-50 h-screen",
           "lg:translate-x-0 shadow-2xl",
-          isMobileMenuOpen ? "translate-x-0 animate-slide-in-right" : "-translate-x-full lg:translate-x-0",
-          isCollapsed ? "w-16" : "w-64",
+          isMobileMenuOpen ? "translate-x-0 animate-slide-in-left" : "-translate-x-full lg:translate-x-0",
+          isCollapsed ? "w-16 lg:w-20" : "w-72 sm:w-64",
           className,
         )}
       >
         {/* Header */}
-        <div className="p-4 border-b border-border/50 backdrop-blur-xl">
+        <div className="p-4 sm:p-5 border-b border-border/50 backdrop-blur-xl safe-area-inset-top">
           <div className="flex items-center justify-between">
             <div
               className={cn("flex items-center space-x-3 transition-all duration-300", isCollapsed && "justify-center")}
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center animate-glow shadow-glow">
+              <div className="w-9 h-9 rounded-xl bg-gradient-primary flex items-center justify-center animate-glow shadow-glow flex-shrink-0">
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets%2F3d62991cf83740faa291d13d959ad05c%2Fc783b63f88704338ac16296d2ac24bd7?format=webp&width=800"
                   alt="Disco de vinil Portal UNK"
@@ -137,28 +137,28 @@ export function Sidebar({ className }: SidebarProps) {
                 />
               </div>
               {!isCollapsed && (
-                <div className="animate-fade-in ml-3">
-                  <h1 className="text-lg font-bold gradient-text text-[rgba(136,37,239,0.58)]">Portal UNK</h1>
-                  <p className="text-xs text-muted-foreground">Assessoria Musical</p>
+                <div className="animate-fade-in ml-2 min-w-0">
+                  <h1 className="text-base sm:text-lg font-bold gradient-text text-[rgba(136,37,239,0.58)]">Portal UNK</h1>
+                  <p className="text-xs text-muted-foreground truncate">Assessoria Musical</p>
                 </div>
               )}
             </div>
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-all duration-300"
+              className="text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-all duration-300 h-9 w-9 apple-touch-highlight flex-shrink-0"
             >
-              {isCollapsed ? <Menu className="w-4 h-4" /> : <X className="w-4 h-4" />}
+              {isCollapsed ? <Menu className="w-5 h-5" /> : <X className="w-5 h-5" />}
             </Button>
           </div>
         </div>
 
         {/* User Info */}
         {!isCollapsed && (
-          <div className="p-4 border-b border-border/50 backdrop-blur-xl animate-fade-in -ml-11">
+          <div className="p-4 sm:p-5 border-b border-border/50 backdrop-blur-xl animate-fade-in">
             <div className="flex items-center space-x-3 hover-lift cursor-pointer">
-              <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center shadow-glow animate-pulse" />
+              <div className="w-11 h-11 rounded-full bg-gradient-primary flex items-center justify-center shadow-glow animate-pulse flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate text-[#FFE6F4]">
                   {user?.username || user?.email}
@@ -172,7 +172,7 @@ export function Sidebar({ className }: SidebarProps) {
         )}
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+        <nav className="flex-1 p-4 sm:p-5 space-y-2 overflow-y-auto scrollbar-hide">
           {navItems.map((item, index) => {
             const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))
 
@@ -186,15 +186,15 @@ export function Sidebar({ className }: SidebarProps) {
                   }}
                   className={cn(
                     "w-full justify-start text-left font-normal transition-all duration-300",
-                    "hover-lift animate-fade-in",
-                    isCollapsed ? "px-2" : "px-3",
+                    "hover-lift animate-fade-in h-10 sm:h-11 apple-touch-highlight",
+                    isCollapsed ? "px-2" : "px-3 sm:px-4",
                     isActive
                       ? "bg-gradient-to-r from-neon-purple to-neon-blue text-white shadow-glow border-0 hover:shadow-glow"
                       : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
                   )}
                 >
-                  <item.icon className={cn("w-4 h-4", !isCollapsed && "mr-3")} />
-                  {!isCollapsed && <span>{item.label}</span>}
+                  <item.icon className={cn("w-5 h-5 flex-shrink-0", !isCollapsed && "mr-3")} />
+                  {!isCollapsed && <span className="text-sm sm:text-base">{item.label}</span>}
                 </Button>
               </Link>
             )
@@ -202,19 +202,19 @@ export function Sidebar({ className }: SidebarProps) {
         </nav>
 
         {/* Logout */}
-        <div className="p-4 border-t border-border/50">
+        <div className="p-4 sm:p-5 border-t border-border/50 safe-area-inset-bottom">
           <Button
             onClick={handleLogout}
             variant="ghost"
             disabled={isLoggingOut}
             className={cn(
-              "w-full justify-start text-left font-normal text-muted-foreground hover:text-foreground hover:bg-destructive/20",
-              isCollapsed ? "px-2" : "px-3",
+              "w-full justify-start text-left font-normal text-muted-foreground hover:text-foreground hover:bg-destructive/20 h-10 sm:h-11 apple-touch-highlight",
+              isCollapsed ? "px-2" : "px-3 sm:px-4",
               isLoggingOut && "opacity-70 cursor-not-allowed",
             )}
           >
-            <LogOut className={cn("w-4 h-4", !isCollapsed && "mr-3")} />
-            {!isCollapsed && <span>{isLoggingOut ? "Saindo..." : "Sair"}</span>}
+            <LogOut className={cn("w-5 h-5 flex-shrink-0", !isCollapsed && "mr-3")} />
+            {!isCollapsed && <span className="text-sm sm:text-base">{isLoggingOut ? "Saindo..." : "Sair"}</span>}
           </Button>
         </div>
       </div>

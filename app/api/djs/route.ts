@@ -1,9 +1,18 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getSql } from "@/lib/neon"
+import { getSql, isNeonConfigured } from "@/lib/neon"
 
 export async function GET() {
   try {
+    if (!isNeonConfigured()) {
+      console.warn("Database not configured. Please connect to Neon.")
+      return NextResponse.json({ djs: [], warning: "Database not configured" }, { status: 200 })
+    }
+
     const sql = getSql()
+
+    if (!sql) {
+      throw new Error("Failed to initialize database connection")
+    }
 
     const data = await sql`
       SELECT * FROM djs
@@ -13,14 +22,25 @@ export async function GET() {
     return NextResponse.json({ djs: data })
   } catch (error) {
     console.error("Failed to fetch DJs:", error)
-    return NextResponse.json({ error: "Failed to fetch DJs" }, { status: 500 })
+    return NextResponse.json({
+      error: "Failed to fetch DJs",
+      details: error instanceof Error ? error.message : "Unknown error"
+    }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
+    if (!isNeonConfigured()) {
+      return NextResponse.json({ error: "Database not configured" }, { status: 503 })
+    }
+
     const payload = await request.json()
     const sql = getSql()
+
+    if (!sql) {
+      throw new Error("Failed to initialize database connection")
+    }
 
     // Normalize status
     if (payload.status && typeof payload.status === "string") {
@@ -54,12 +74,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ dj: result[0] })
   } catch (error) {
     console.error("Failed to create DJ:", error)
-    return NextResponse.json({ error: "Failed to create DJ" }, { status: 500 })
+    return NextResponse.json({
+      error: "Failed to create DJ",
+      details: error instanceof Error ? error.message : "Unknown error"
+    }, { status: 500 })
   }
 }
 
 export async function PUT(request: NextRequest) {
   try {
+    if (!isNeonConfigured()) {
+      return NextResponse.json({ error: "Database not configured" }, { status: 503 })
+    }
+
     const { id, ...payload } = await request.json()
 
     if (!id) {
@@ -67,6 +94,10 @@ export async function PUT(request: NextRequest) {
     }
 
     const sql = getSql()
+
+    if (!sql) {
+      throw new Error("Failed to initialize database connection")
+    }
 
     // Normalize status
     if (payload.status && typeof payload.status === "string") {
@@ -84,7 +115,7 @@ export async function PUT(request: NextRequest) {
 
     const result = await sql`
       UPDATE djs
-      SET 
+      SET
         artist_name = ${payload.artist_name},
         real_name = ${payload.real_name},
         email = ${payload.email},
@@ -108,6 +139,9 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ dj: result[0] })
   } catch (error) {
     console.error("Failed to update DJ:", error)
-    return NextResponse.json({ error: "Failed to update DJ" }, { status: 500 })
+    return NextResponse.json({
+      error: "Failed to update DJ",
+      details: error instanceof Error ? error.message : "Unknown error"
+    }, { status: 500 })
   }
 }

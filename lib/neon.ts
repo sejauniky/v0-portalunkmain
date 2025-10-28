@@ -26,8 +26,8 @@ export const sql = (() => {
   }
 })()
 
-// Helper function to check if Neon is configured
-export const isNeonConfigured = Boolean(process.env.DATABASE_URL)
+// Helper function to check if Neon is configured (check at runtime, not import time)
+export const isNeonConfigured = () => Boolean(process.env.DATABASE_URL)
 
 // Export for compatibility
 export { sql as neonClient }

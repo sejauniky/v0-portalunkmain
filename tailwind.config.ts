@@ -65,7 +65,18 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
+          '"Helvetica Neue"',
+          'Arial',
+          'sans-serif',
+          '"Apple Color Emoji"',
+          '"Segoe UI Emoji"',
+          '"Segoe UI Symbol"',
+        ],
       },
       backgroundImage: {
         'gradient-primary': 'var(--gradient-primary)',
@@ -98,6 +109,14 @@ export default {
         "glass-shine": {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
+        },
+        "slide-in-right": {
+          "0%": { transform: "translateX(100%)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
+        "slide-in-left": {
+          "0%": { transform: "translateX(-100%)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
         }
       },
       animation: {
@@ -106,12 +125,14 @@ export default {
         "fade-in": "fade-in 0.3s ease-out",
         "scale-in": "scale-in 0.2s ease-out",
         "glass-shine": "glass-shine 2s ease-in-out infinite",
+        "slide-in-right": "slide-in-right 0.3s ease-out",
+        "slide-in-left": "slide-in-left 0.3s ease-out",
       },
     },
   },
   plugins: [
     require("tailwindcss-animate"),
-    function({ addComponents }: { addComponents: (components: Record<string, any>) => void }) {
+    function({ addComponents, addUtilities }: { addComponents: (components: Record<string, any>) => void; addUtilities: (utilities: Record<string, any>) => void }) {
       addComponents({
         '.glass-card': {
           backgroundColor: 'hsl(var(--glass-bg))',
@@ -170,7 +191,25 @@ export default {
           color: 'hsl(var(--status-sent))',
           borderColor: 'hsl(var(--status-sent) / 0.3)',
         },
-      })
+      });
+
+      addUtilities({
+        '.safe-area-inset-top': {
+          paddingTop: 'max(1rem, env(safe-area-inset-top))',
+        },
+        '.safe-area-inset-bottom': {
+          paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
+        },
+        '.safe-area-inset-left': {
+          paddingLeft: 'max(0px, env(safe-area-inset-left))',
+        },
+        '.safe-area-inset-right': {
+          paddingRight: 'max(0px, env(safe-area-inset-right))',
+        },
+        '.apple-touch-highlight': {
+          WebkitTapHighlightColor: 'transparent',
+        },
+      });
     }
   ],
 } satisfies Config;
