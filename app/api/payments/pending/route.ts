@@ -17,8 +17,7 @@ export async function GET() {
     const data = await sql`
       SELECT *
       FROM events
-      WHERE payment_proof IS NOT NULL
-      ORDER BY created_at DESC NULLS LAST
+      LIMIT 1
     `
 
     return NextResponse.json({ payments: data })
