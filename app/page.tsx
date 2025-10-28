@@ -179,7 +179,7 @@ const Home = () => {
     },
     {
       title: "Agenda do Admin",
-      value: currentTime?.toLocaleDateString("pt-BR") || "--",
+      value: isHydrated && currentTime ? currentTime.toLocaleDateString("pt-BR") : "--",
       change: "Clique para acessar",
       changeType: "neutral",
       icon: "Calendar",
