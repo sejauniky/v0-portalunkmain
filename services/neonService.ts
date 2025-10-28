@@ -188,36 +188,46 @@ class PaymentService extends BaseNeonService {
   }
 
   async getAll() {
-    const result = await sql`
-      SELECT pay.*, 
-             e.title as event_title,
-             e.event_date,
-             p.name as producer_name,
-             p.company_name,
-             d.name as dj_name
-      FROM payments pay
-      LEFT JOIN events e ON pay.event_id = e.id
-      LEFT JOIN producers p ON e.producer_id = p.id
-      LEFT JOIN djs d ON e.dj_id = d.id
-      ORDER BY pay.created_at DESC
-    `
-    return result
+    if (!sql) return []
+    try {
+      const result = await sql`
+        SELECT pay.*,
+               e.title as event_title,
+               e.event_date,
+               p.name as producer_name,
+               p.company_name,
+               d.name as dj_name
+        FROM payments pay
+        LEFT JOIN events e ON pay.event_id = e.id
+        LEFT JOIN producers p ON e.producer_id = p.id
+        LEFT JOIN djs d ON e.dj_id = d.id
+        ORDER BY pay.created_at DESC
+      `
+      return result
+    } catch {
+      return []
+    }
   }
 
   async getPending() {
-    const result = await sql`
-      SELECT pay.*, 
-             e.title as event_title,
-             e.event_date,
-             p.name as producer_name,
-             p.company_name
-      FROM payments pay
-      LEFT JOIN events e ON pay.event_id = e.id
-      LEFT JOIN producers p ON e.producer_id = p.id
-      WHERE pay.status = 'pending'
-      ORDER BY pay.created_at DESC
-    `
-    return result
+    if (!sql) return []
+    try {
+      const result = await sql`
+        SELECT pay.*,
+               e.title as event_title,
+               e.event_date,
+               p.name as producer_name,
+               p.company_name
+        FROM payments pay
+        LEFT JOIN events e ON pay.event_id = e.id
+        LEFT JOIN producers p ON e.producer_id = p.id
+        WHERE pay.status = 'pending'
+        ORDER BY pay.created_at DESC
+      `
+      return result
+    } catch {
+      return []
+    }
   }
 }
 
@@ -228,21 +238,26 @@ class ContractService extends BaseNeonService {
   }
 
   async getAll() {
-    const result = await sql`
-      SELECT c.*, 
-             e.title as event_title,
-             e.event_date,
-             e.cache_value,
-             d.name as dj_name,
-             p.name as producer_name,
-             p.company_name
-      FROM contracts c
-      LEFT JOIN events e ON c.event_id = e.id
-      LEFT JOIN djs d ON e.dj_id = d.id
-      LEFT JOIN producers p ON e.producer_id = p.id
-      ORDER BY c.created_at DESC
-    `
-    return result
+    if (!sql) return []
+    try {
+      const result = await sql`
+        SELECT c.*,
+               e.title as event_title,
+               e.event_date,
+               e.cache_value,
+               d.name as dj_name,
+               p.name as producer_name,
+               p.company_name
+        FROM contracts c
+        LEFT JOIN events e ON c.event_id = e.id
+        LEFT JOIN djs d ON e.dj_id = d.id
+        LEFT JOIN producers p ON e.producer_id = p.id
+        ORDER BY c.created_at DESC
+      `
+      return result
+    } catch {
+      return []
+    }
   }
 }
 
