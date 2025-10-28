@@ -1,9 +1,18 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getSql } from "@/lib/neon"
+import { getSql, isNeonConfigured } from "@/lib/neon"
 
 export async function GET() {
   try {
+    if (!isNeonConfigured) {
+      console.warn("Database not configured. Please connect to Neon.")
+      return NextResponse.json({ djs: [], warning: "Database not configured" }, { status: 200 })
+    }
+
     const sql = getSql()
+
+    if (!sql) {
+      throw new Error("Failed to initialize database connection")
+    }
 
     const data = await sql`
       SELECT * FROM djs
@@ -13,7 +22,10 @@ export async function GET() {
     return NextResponse.json({ djs: data })
   } catch (error) {
     console.error("Failed to fetch DJs:", error)
-    return NextResponse.json({ error: "Failed to fetch DJs" }, { status: 500 })
+    return NextResponse.json({
+      error: "Failed to fetch DJs",
+      details: error instanceof Error ? error.message : "Unknown error"
+    }, { status: 500 })
   }
 }
 
