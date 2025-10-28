@@ -17,7 +17,7 @@ export async function GET() {
     const data = await sql`
       SELECT *
       FROM events
-      LIMIT 1
+      ORDER BY created_at DESC
     `
 
     return NextResponse.json({ payments: data })
