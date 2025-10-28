@@ -80,41 +80,56 @@ class EventService extends BaseNeonService {
   }
 
   async getByDj(djId: string) {
-    const result = await sql`
-      SELECT e.*, d.name as dj_name, d.artist_name, p.name as producer_name, p.company_name
-      FROM events e
-      LEFT JOIN djs d ON e.dj_id = d.id
-      LEFT JOIN producers p ON e.producer_id = p.id
-      WHERE e.dj_id = ${djId}
-      ORDER BY e.event_date DESC
-    `
-    return result
+    if (!sql) return []
+    try {
+      const result = await sql`
+        SELECT e.*, d.name as dj_name, d.artist_name, p.name as producer_name, p.company_name
+        FROM events e
+        LEFT JOIN djs d ON e.dj_id = d.id
+        LEFT JOIN producers p ON e.producer_id = p.id
+        WHERE e.dj_id = ${djId}
+        ORDER BY e.event_date DESC
+      `
+      return result
+    } catch {
+      return []
+    }
   }
 
   async getByProducer(producerId: string) {
-    const result = await sql`
-      SELECT e.*, d.name as dj_name, d.artist_name
-      FROM events e
-      LEFT JOIN djs d ON e.dj_id = d.id
-      WHERE e.producer_id = ${producerId}
-      ORDER BY e.event_date DESC
-    `
-    return result
+    if (!sql) return []
+    try {
+      const result = await sql`
+        SELECT e.*, d.name as dj_name, d.artist_name
+        FROM events e
+        LEFT JOIN djs d ON e.dj_id = d.id
+        WHERE e.producer_id = ${producerId}
+        ORDER BY e.event_date DESC
+      `
+      return result
+    } catch {
+      return []
+    }
   }
 
   async getAll() {
-    const result = await sql`
-      SELECT e.*, 
-             d.name as dj_name, 
-             d.artist_name,
-             p.name as producer_name,
-             p.company_name
-      FROM events e
-      LEFT JOIN djs d ON e.dj_id = d.id
-      LEFT JOIN producers p ON e.producer_id = p.id
-      ORDER BY e.event_date DESC
-    `
-    return result
+    if (!sql) return []
+    try {
+      const result = await sql`
+        SELECT e.*,
+               d.name as dj_name,
+               d.artist_name,
+               p.name as producer_name,
+               p.company_name
+        FROM events e
+        LEFT JOIN djs d ON e.dj_id = d.id
+        LEFT JOIN producers p ON e.producer_id = p.id
+        ORDER BY e.event_date DESC
+      `
+      return result
+    } catch {
+      return []
+    }
   }
 }
 
