@@ -164,13 +164,47 @@
     background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
   }
 
-  /* Safe area insets for mobile devices */
+  /* Safe area insets for mobile devices with fallback */
   .safe-area-inset-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
   }
 
   .safe-area-inset-top {
-    padding-top: env(safe-area-inset-top);
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  .safe-area-inset-left {
+    padding-left: max(0px, env(safe-area-inset-left));
+  }
+
+  .safe-area-inset-right {
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+
+  /* Apple-style scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Touch target sizes (Apple standard: min 44x44pt) */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Smooth text rendering */
+  .apple-text {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   /* Efeito glossy para cards */
