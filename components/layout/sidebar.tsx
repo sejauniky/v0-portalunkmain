@@ -67,7 +67,7 @@ export function Sidebar({ className }: SidebarProps) {
       toast({
         variant: "destructive",
         title: "Erro ao sair",
-        description: error instanceof Error ? error.message : "N��o foi possível encerrar sua sessão.",
+        description: error instanceof Error ? error.message : "Não foi possível encerrar sua sessão.",
       })
     } finally {
       setIsLoggingOut(false)
@@ -123,12 +123,12 @@ export function Sidebar({ className }: SidebarProps) {
         )}
       >
         {/* Header */}
-        <div className="p-4 border-b border-border/50 backdrop-blur-xl">
+        <div className="p-4 sm:p-5 border-b border-border/50 backdrop-blur-xl safe-area-inset-top">
           <div className="flex items-center justify-between">
             <div
               className={cn("flex items-center space-x-3 transition-all duration-300", isCollapsed && "justify-center")}
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center animate-glow shadow-glow">
+              <div className="w-9 h-9 rounded-xl bg-gradient-primary flex items-center justify-center animate-glow shadow-glow flex-shrink-0">
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets%2F3d62991cf83740faa291d13d959ad05c%2Fc783b63f88704338ac16296d2ac24bd7?format=webp&width=800"
                   alt="Disco de vinil Portal UNK"
@@ -137,19 +137,19 @@ export function Sidebar({ className }: SidebarProps) {
                 />
               </div>
               {!isCollapsed && (
-                <div className="animate-fade-in ml-3">
-                  <h1 className="text-lg font-bold gradient-text text-[rgba(136,37,239,0.58)]">Portal UNK</h1>
-                  <p className="text-xs text-muted-foreground">Assessoria Musical</p>
+                <div className="animate-fade-in ml-2 min-w-0">
+                  <h1 className="text-base sm:text-lg font-bold gradient-text text-[rgba(136,37,239,0.58)]">Portal UNK</h1>
+                  <p className="text-xs text-muted-foreground truncate">Assessoria Musical</p>
                 </div>
               )}
             </div>
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-all duration-300"
+              className="text-muted-foreground hover:text-foreground hover:bg-primary/10 transition-all duration-300 h-9 w-9 apple-touch-highlight flex-shrink-0"
             >
-              {isCollapsed ? <Menu className="w-4 h-4" /> : <X className="w-4 h-4" />}
+              {isCollapsed ? <Menu className="w-5 h-5" /> : <X className="w-5 h-5" />}
             </Button>
           </div>
         </div>
