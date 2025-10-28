@@ -31,7 +31,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!isNeonConfigured) {
+    if (!isNeonConfigured()) {
       return NextResponse.json({ error: "Database not configured" }, { status: 503 })
     }
 
