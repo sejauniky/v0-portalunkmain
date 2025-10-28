@@ -31,8 +31,16 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    if (!isNeonConfigured) {
+      return NextResponse.json({ error: "Database not configured" }, { status: 503 })
+    }
+
     const payload = await request.json()
     const sql = getSql()
+
+    if (!sql) {
+      throw new Error("Failed to initialize database connection")
+    }
 
     // Normalize status
     if (payload.status && typeof payload.status === "string") {
@@ -66,7 +74,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ dj: result[0] })
   } catch (error) {
     console.error("Failed to create DJ:", error)
-    return NextResponse.json({ error: "Failed to create DJ" }, { status: 500 })
+    return NextResponse.json({
+      error: "Failed to create DJ",
+      details: error instanceof Error ? error.message : "Unknown error"
+    }, { status: 500 })
   }
 }
 
