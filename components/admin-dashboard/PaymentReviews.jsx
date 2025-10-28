@@ -92,8 +92,8 @@ const PaymentReviews = () => {
       {pending.map((ev) => (
         <div key={ev.id} className="p-3 border rounded flex items-center justify-between">
           <div>
-            <div className="font-semibold">{ev.title}</div>
-            <div className="text-xs text-muted-foreground">{ev.event_date}</div>
+            <div className="font-semibold">{ev.title || ev.event_name || ev.name || "Evento"}</div>
+            <div className="text-xs text-muted-foreground">{ev.event_date || ev.date || "Data não disponível"}</div>
             {ev.payment_proof && (
               <a href={ev.payment_proof} target="_blank" rel="noreferrer" className="text-sm text-blue-400 underline">
                 Visualizar comprovante
