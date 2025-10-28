@@ -266,24 +266,46 @@ class AnalyticsService {
   public __serviceName = "analyticsService"
 
   async getDashboardMetrics() {
-    const [djCount, eventCount, paymentStats] = await Promise.all([
-      sql`SELECT COUNT(*) as count FROM djs`,
-      sql`SELECT COUNT(*) as count FROM events`,
-      sql`
-        SELECT 
-          SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) as total_paid,
-          SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) as total_pending
-        FROM payments
-      `,
-    ])
+    if (!sql) {
+      return {
+        totalDJs: 0,
+        totalEvents: 0,
+        totalPaid: 0,
+        totalPending: 0,
+        djsChange: "+0%",
+        djsChangeType: "neutral",
+      }
+    }
 
-    return {
-      totalDJs: djCount[0]?.count || 0,
-      totalEvents: eventCount[0]?.count || 0,
-      totalPaid: paymentStats[0]?.total_paid || 0,
-      totalPending: paymentStats[0]?.total_pending || 0,
-      djsChange: "+0%",
-      djsChangeType: "neutral",
+    try {
+      const [djCount, eventCount, paymentStats] = await Promise.all([
+        sql`SELECT COUNT(*) as count FROM djs`,
+        sql`SELECT COUNT(*) as count FROM events`,
+        sql`
+          SELECT
+            SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) as total_paid,
+            SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) as total_pending
+          FROM payments
+        `,
+      ])
+
+      return {
+        totalDJs: djCount[0]?.count || 0,
+        totalEvents: eventCount[0]?.count || 0,
+        totalPaid: paymentStats[0]?.total_paid || 0,
+        totalPending: paymentStats[0]?.total_pending || 0,
+        djsChange: "+0%",
+        djsChangeType: "neutral",
+      }
+    } catch {
+      return {
+        totalDJs: 0,
+        totalEvents: 0,
+        totalPaid: 0,
+        totalPending: 0,
+        djsChange: "+0%",
+        djsChangeType: "neutral",
+      }
     }
   }
 }
