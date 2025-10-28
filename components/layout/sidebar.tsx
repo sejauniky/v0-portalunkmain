@@ -67,7 +67,7 @@ export function Sidebar({ className }: SidebarProps) {
       toast({
         variant: "destructive",
         title: "Erro ao sair",
-        description: error instanceof Error ? error.message : "Não foi possível encerrar sua sessão.",
+        description: error instanceof Error ? error.message : "N��o foi possível encerrar sua sessão.",
       })
     } finally {
       setIsLoggingOut(false)
@@ -115,10 +115,10 @@ export function Sidebar({ className }: SidebarProps) {
       <div
         className={cn(
           "glass-card flex flex-col border-r transition-all duration-500 ease-in-out",
-          "fixed lg:sticky top-1.5 lg:top-2 z-50 h-screen",
+          "fixed lg:sticky top-0 lg:top-0 z-50 h-screen",
           "lg:translate-x-0 shadow-2xl",
-          isMobileMenuOpen ? "translate-x-0 animate-slide-in-right" : "-translate-x-full lg:translate-x-0",
-          isCollapsed ? "w-16" : "w-64",
+          isMobileMenuOpen ? "translate-x-0 animate-slide-in-left" : "-translate-x-full lg:translate-x-0",
+          isCollapsed ? "w-16 lg:w-20" : "w-72 sm:w-64",
           className,
         )}
       >
