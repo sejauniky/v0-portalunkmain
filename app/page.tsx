@@ -73,7 +73,8 @@ const resolveEventDjName = (event) => {
 }
 
 const Home = () => {
-  const [currentTime, setCurrentTime] = useState(new Date())
+  const [currentTime, setCurrentTime] = useState<Date | null>(null)
+  const [isHydrated, setIsHydrated] = useState(false)
   const { user } = useAuth()
   const [, setLocation] = useLocation()
 
@@ -88,6 +89,10 @@ const Home = () => {
   const { data: djs } = useNeonData(djService, "getAll", [], [])
 
   useEffect(() => {
+    // Set initial time and hydration flag on client
+    setCurrentTime(new Date())
+    setIsHydrated(true)
+
     const timer = setInterval(() => {
       setCurrentTime(new Date())
     }, 60000)
