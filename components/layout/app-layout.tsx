@@ -2,24 +2,14 @@
 
 import type { ReactNode } from "react"
 import { Sidebar } from "./sidebar"
-import { useUser } from "@clerk/nextjs"
-import { Loading } from "@/components/ui/loading"
+import { useAuth } from "@/hooks/use-auth"
 
 interface AppLayoutProps {
   children: ReactNode
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const { user, isLoaded } = useUser()
-  const role = (user?.publicMetadata?.role as "admin" | "producer") || "producer"
-
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loading message="Carregando aplicação..." />
-      </div>
-    )
-  }
+  const { user, role } = useAuth()
 
   if (!user) {
     return <>{children}</>

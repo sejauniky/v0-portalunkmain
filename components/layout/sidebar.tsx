@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
-import { useUser } from "@clerk/nextjs"
+import { useAuth } from "@/hooks/use-auth"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
@@ -42,7 +42,7 @@ const producerNavItems = [
 ]
 
 export function Sidebar({ className }: SidebarProps) {
-  const { user } = useUser()
+  const { user } = useAuth()
   const { toast } = useToast()
   const router = useRouter()
   const pathname = usePathname()
@@ -50,20 +50,18 @@ export function Sidebar({ className }: SidebarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
-  const userRole = (user?.publicMetadata?.role as "admin" | "producer") || "producer"
+  const userRole = (user?.role as "admin" | "producer") || "admin"
   const navItems = userRole === "admin" ? adminNavItems : producerNavItems
 
   const handleLogout = async () => {
     if (isLoggingOut) return
     setIsLoggingOut(true)
     try {
-      await fetch("/api/auth/signout", { method: "POST" })
       setIsMobileMenuOpen(false)
       toast({
         title: "Sessão encerrada",
         description: "Você saiu do portal com sucesso.",
       })
-      router.push("/sign-in")
     } catch (error: unknown) {
       console.error("Logout failed:", error)
       toast({
@@ -163,7 +161,7 @@ export function Sidebar({ className }: SidebarProps) {
               <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center shadow-glow animate-pulse" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate text-[#FFE6F4]">
-                  {user?.fullName || user?.username || user?.emailAddresses[0]?.emailAddress}
+                  {user?.username || user?.email}
                 </p>
                 <p className="text-xs text-[rgba(193,80,253,1)]">
                   {userRole === "admin" ? "Administrador" : "Produtor"}

@@ -73,7 +73,8 @@ const resolveEventDjName = (event) => {
 }
 
 const Home = () => {
-  const [currentTime, setCurrentTime] = useState(new Date())
+  const [currentTime, setCurrentTime] = useState<Date | null>(null)
+  const [isHydrated, setIsHydrated] = useState(false)
   const { user } = useAuth()
   const [, setLocation] = useLocation()
 
@@ -88,6 +89,10 @@ const Home = () => {
   const { data: djs } = useNeonData(djService, "getAll", [], [])
 
   useEffect(() => {
+    // Set initial time and hydration flag on client
+    setCurrentTime(new Date())
+    setIsHydrated(true)
+
     const timer = setInterval(() => {
       setCurrentTime(new Date())
     }, 60000)
@@ -174,7 +179,7 @@ const Home = () => {
     },
     {
       title: "Agenda do Admin",
-      value: currentTime?.toLocaleDateString("pt-BR") || "--",
+      value: isHydrated && currentTime ? currentTime.toLocaleDateString("pt-BR") : "--",
       change: "Clique para acessar",
       changeType: "neutral",
       icon: "Calendar",
@@ -299,12 +304,12 @@ const Home = () => {
             <h1 className="text-2xl font-bold text-foreground">Dashboard Administrativo</h1>
             <p className="text-muted-foreground mt-1">
               Visão geral das operações -{" "}
-              {currentTime?.toLocaleDateString("pt-BR", {
+              {isHydrated && currentTime ? currentTime.toLocaleDateString("pt-BR", {
                 weekday: "long",
                 year: "numeric",
                 month: "long",
                 day: "numeric",
-              })}
+              }) : "--"}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center sm:gap-3">
@@ -315,7 +320,7 @@ const Home = () => {
                 style={{ color: "rgba(209, 166, 39, 1)", textShadow: "1px 1px 3px rgba(221, 118, 28, 1)" }}
               />
               <span style={{ color: "rgba(250, 161, 72, 1)" }}>
-                {currentTime?.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                {isHydrated && currentTime ? currentTime.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "--:--"}
               </span>
             </div>
             {user && (
