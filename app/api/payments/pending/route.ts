@@ -15,11 +15,10 @@ export async function GET() {
     }
 
     const data = await sql`
-      SELECT id, title, event_date, fee, cache_value, payment_proof, status
+      SELECT *
       FROM events
       WHERE payment_proof IS NOT NULL
-        AND status != 'pago'
-      ORDER BY created_at DESC
+      ORDER BY created_at DESC NULLS LAST
     `
 
     return NextResponse.json({ payments: data })
