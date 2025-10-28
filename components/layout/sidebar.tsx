@@ -42,7 +42,7 @@ const producerNavItems = [
 ]
 
 export function Sidebar({ className }: SidebarProps) {
-  const { user } = useUser()
+  const { user } = useAuth()
   const { toast } = useToast()
   const router = useRouter()
   const pathname = usePathname()
@@ -50,20 +50,18 @@ export function Sidebar({ className }: SidebarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
-  const userRole = (user?.publicMetadata?.role as "admin" | "producer") || "producer"
+  const userRole = (user?.role as "admin" | "producer") || "admin"
   const navItems = userRole === "admin" ? adminNavItems : producerNavItems
 
   const handleLogout = async () => {
     if (isLoggingOut) return
     setIsLoggingOut(true)
     try {
-      await fetch("/api/auth/signout", { method: "POST" })
       setIsMobileMenuOpen(false)
       toast({
         title: "Sessão encerrada",
         description: "Você saiu do portal com sucesso.",
       })
-      router.push("/sign-in")
     } catch (error: unknown) {
       console.error("Logout failed:", error)
       toast({
